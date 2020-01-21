@@ -40,8 +40,8 @@ def ssp_postprocess_landwaterstorage(focus_site_ids, pipeline_id):
 	lwssamps = np.transpose(my_proj["lwssamps"])
 	
 	# Load the site locations	
-	ratefile = os.path.join(os.path.dirname(__file__), "bkgdrate.tsv")
-	(_, site_ids, site_lats, site_lons) = read_bkgdrate(ratefile, True)
+	ratefile = os.path.join(os.path.dirname(__file__), "bkgdrate_{}.tsv".format(scen))
+	(_, site_ids, site_lats, site_lons) = read_bkgdrate(ratefile, True)	
 	
 	# Match the user selected sites to those in the PSMSL data
 	if np.any([x >= 0 for x in focus_site_ids]):

@@ -1,0 +1,23 @@
+[project]
+name = "ssp-landwaterstorage"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+authors = [
+    { name = "Brewster Malevich", email = "bmalevich@impactlab.org" }
+]
+requires-python = ">=3.12"
+dependencies = [
+    "dask>=2025.5.1",
+    "netcdf4>=1.7.2",
+    "numpy>=2.2.6",
+    "scipy>=1.15.3",
+    "xarray>=2025.4.0",
+]
+
+[project.scripts]
+ssp-landwaterstorage = "ssp_landwaterstorage:main"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"

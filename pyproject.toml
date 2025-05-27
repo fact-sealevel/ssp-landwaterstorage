@@ -8,6 +8,7 @@ authors = [
 ]
 requires-python = ">=3.12"
 dependencies = [
+    "click>=8.2.1",
     "dask>=2025.5.1",
     "netcdf4>=1.7.2",
     "numpy>=2.2.6",
@@ -16,7 +17,7 @@ dependencies = [
 ]
 
 [project.scripts]
-ssp-landwaterstorage = "ssp_landwaterstorage:main"
+ssp-landwaterstorage = "ssp_landwaterstorage:cli.main"
 
 [build-system]
 requires = ["hatchling"]

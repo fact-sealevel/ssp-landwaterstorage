@@ -341,6 +341,7 @@ name = "ssp-landwaterstorage"
 version = "0.1.0"
 source = { editable = "." }
 dependencies = [
+    { name = "click" },
     { name = "dask" },
     { name = "netcdf4" },
     { name = "numpy" },
@@ -355,6 +356,7 @@ dev = [
 
 [package.metadata]
 requires-dist = [
+    { name = "click", specifier = ">=8.2.1" },
     { name = "dask", specifier = ">=2025.5.1" },
     { name = "netcdf4", specifier = ">=1.7.2" },
     { name = "numpy", specifier = ">=2.2.6" },

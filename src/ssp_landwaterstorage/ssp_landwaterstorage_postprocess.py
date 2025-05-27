@@ -3,8 +3,8 @@ import pickle
 import os
 import argparse
 import time
-from read_locationfile import ReadLocationFile
-from AssignFP import AssignFP
+from ssp_landwaterstorage.read_locationfile import ReadLocationFile
+from ssp_landwaterstorage.AssignFP import AssignFP
 
 import xarray as xr
 import dask.array as da

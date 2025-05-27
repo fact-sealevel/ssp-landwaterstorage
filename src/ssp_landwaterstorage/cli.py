@@ -59,7 +59,7 @@ import click
 @click.option(
     "--pyear-step",
     envvar="SSP_LANDWATERSTORAGE_PYEAR_STEP",
-    help="Step size in years between start and end at which projections are produced",
+    help="Step size in years between start and end at which projections are produced.",
     default=10,
     type=click.IntRange(min=1),
 )

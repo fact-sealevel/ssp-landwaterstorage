@@ -18,6 +18,12 @@ import click
 
 @click.command()
 @click.option(
+    "--pipeline-id",
+    envvar="SSP_LANDWATERSTORAGE_PIPELINE_ID",
+    help="Unique identifier for this instance of the module.",
+    required=True,
+)
+@click.option(
     "--scenario",
     envvar="SSP_LANDWATERSTORAGE_SCENARIO",
     help="Use RCP or SSP scenario.",
@@ -74,12 +80,6 @@ import click
     envvar="SSP_LANDWATERSTORAGE_SEED",
     help="Seed value for random number generator.",
     default=1234,
-)
-@click.option(
-    "--pipeline-id",
-    envvar="SSP_LANDWATERSTORAGE_PIPELINE_ID",
-    help="Unique identifier for this instance of the module.",
-    required=True,
 )
 @click.option(
     "--dcyear-start",

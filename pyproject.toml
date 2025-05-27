@@ -21,3 +21,8 @@ ssp-landwaterstorage = "ssp_landwaterstorage:main"
 [build-system]
 requires = ["hatchling"]
 build-backend = "hatchling.build"
+
+[dependency-groups]
+dev = [
+    "ruff>=0.11.11",
+]

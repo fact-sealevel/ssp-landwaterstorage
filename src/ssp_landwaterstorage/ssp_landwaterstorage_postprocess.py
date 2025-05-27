@@ -28,8 +28,9 @@ def ssp_postprocess_landwaterstorage(locationfilename, chunksize, pipeline_id):
     projfile = "{}_projections.pkl".format(pipeline_id)
     try:
         f = open(projfile, "rb")
-    except:
+    except Exception as e:
         print("Cannot open projection file {}\n").format(projfile)
+        raise e
 
     # Extract the configuration variables
     my_proj = pickle.load(f)

@@ -129,8 +129,9 @@ def ssp_fit_landwaterstorage(pipeline_id):
     datafile = "{}_data.pkl".format(pipeline_id)
     try:
         f = open(datafile, "rb")
-    except:
+    except Exception as e:
         print("Cannot open data file\n")
+        raise e
 
     # Extract the data variables
     my_data = pickle.load(f)
@@ -149,8 +150,9 @@ def ssp_fit_landwaterstorage(pipeline_id):
     configfile = "{}_config.pkl".format(pipeline_id)
     try:
         f = open(configfile, "rb")
-    except:
+    except Exception as e:
         print("Cannot open config file\n")
+        raise e
 
     # Extract the configuration variables
     my_config = pickle.load(f)

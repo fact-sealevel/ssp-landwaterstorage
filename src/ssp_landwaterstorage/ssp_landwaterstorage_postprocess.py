@@ -29,7 +29,7 @@ def ssp_postprocess_landwaterstorage(locationfilename, chunksize, pipeline_id):
     try:
         f = open(projfile, "rb")
     except Exception as e:
-        print("Cannot open projection file {}\n").format(projfile)
+        print(f"Cannot open projection file {projfile}\n")
         raise e
 
     # Extract the configuration variables

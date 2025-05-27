@@ -72,7 +72,7 @@ def ssp_project_landwaterstorage(
     targyears = my_config["targyears"]
     scen = my_config["scen"]
     dotriangular = my_config["dotriangular"]
-    includepokhrel = my_config["includepokhrel"]
+    _ = my_config["includepokhrel"]
 
     # optimisation problem, least squares of fitting dams with sigmoidal function of population
     def sigmoidal(pop0, a, b, c, I0):
@@ -280,11 +280,6 @@ def ssp_project_landwaterstorage(
         os.path.dirname(__file__), "{}_globalsl.nc".format(pipeline_id)
     )
     rootgrp = Dataset(nc_filename, "w", format="NETCDF4")
-
-    # Define Dimensions
-    year_dim = rootgrp.createDimension("years", len(targyears))
-    samp_dim = rootgrp.createDimension("samples", Nsamps)
-    loc_dim = rootgrp.createDimension("locations", 1)
 
     # Populate dimension variables
     year_var = rootgrp.createVariable("years", "i4", ("years",))

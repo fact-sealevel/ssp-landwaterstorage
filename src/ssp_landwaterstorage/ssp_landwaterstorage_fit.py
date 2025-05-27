@@ -162,7 +162,7 @@ def ssp_fit_landwaterstorage(pipeline_id):
     pop0 = my_config["pop0"]
     dgwd_dt_dpop_pcterr = my_config["dgwd_dt_dpop_pcterr"]
     yrs = my_config["yrs"]
-    scen = my_config["scen"]
+    _ = my_config["scen"]
     dotriangular = my_config["dotriangular"]
     includepokhrel = my_config["includepokhrel"]
 
@@ -231,7 +231,6 @@ def ssp_fit_landwaterstorage(pipeline_id):
         std_dgwd_dt_dpop = np.array((min(dgwd_dt_dpop_all), max(dgwd_dt_dpop_all)))
 
     popscenyr0 = popscenyr
-    popscen0 = popscen
     popscen = np.divide(popscen, 1e3)  # convert to thousands
     # popscen = popscen/1000.0
 

@@ -47,8 +47,6 @@ def ssp_postprocess_landwaterstorage(locationfilename, chunksize, pipeline_id):
 
     # Initialize variable to hold the localized projections
     nsamps = lwssamps.shape[0]
-    nyears = len(targyears)
-    nsites = len(site_ids)
 
     # Apply the fingerprints
     fpfile = os.path.join(os.path.dirname(__file__), "REL_GROUNDWATER_NOMASK.nc")

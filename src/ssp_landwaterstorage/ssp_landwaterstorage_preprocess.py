@@ -62,7 +62,7 @@ def ssp_preprocess_landwaterstorage(
 
     with open(pophistfile, "r", newline="") as csvfile:
         popdata = csv.reader(csvfile)
-        first_row = next(popdata)
+        _ = next(popdata)
         i = 0
         t = np.zeros(row_count - 1)
         pop = np.zeros(row_count - 1)
@@ -88,7 +88,7 @@ def ssp_preprocess_landwaterstorage(
 
     with open(reservoirfile, "r", newline="") as csvfile:
         damdata = csv.reader(csvfile)
-        first_row = next(damdata)
+        _ = next(damdata)
         i = 0
         tdams = dams = np.zeros(row_count - 1)
         dams = np.zeros(row_count - 1)
@@ -120,7 +120,7 @@ def ssp_preprocess_landwaterstorage(
         path = gwdfiles_full[j]
         with open(path, "r", newline="") as csvfile:
             gwddata = csv.reader(csvfile)
-            first_row = next(gwddata)
+            _ = next(gwddata)
             i = 0
 
             for row in gwddata:
@@ -137,7 +137,7 @@ def ssp_preprocess_landwaterstorage(
 
     with open(popscenfile, "r", newline="") as csvfile:
         popdata = csv.reader(csvfile)
-        first_row = next(popdata)
+        _ = next(popdata)
         i = 0
         popscenyr = np.zeros(row_count - 1)
         popscen = np.zeros([row_count - 1, 5])  # 5 SSPs

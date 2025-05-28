@@ -1,6 +1,5 @@
 import numpy as np
 import pickle
-import os
 import argparse
 import time
 from ssp_landwaterstorage.read_locationfile import ReadLocationFile
@@ -15,7 +14,7 @@ This script runs the land water storage postprocessing task from the SSP module 
 This task generates localized contributions to sea-level change due to land water storage.
 
 Parameters:
-locationfilename = File that contains points for localization
+locationfile = File that contains points for localization
 pipeline_id = Unique identifier for the pipeline running this code
 
 Output: NetCDF file containing the local sea-level rise projections
@@ -23,7 +22,7 @@ Output: NetCDF file containing the local sea-level rise projections
 """
 
 
-def ssp_postprocess_landwaterstorage(locationfilename, chunksize, pipeline_id):
+def ssp_postprocess_landwaterstorage(fp_file, location_file, chunksize, pipeline_id):
     # Load the configuration file
     projfile = "{}_projections.pkl".format(pipeline_id)
     try:
@@ -42,15 +41,14 @@ def ssp_postprocess_landwaterstorage(locationfilename, chunksize, pipeline_id):
     lwssamps = np.transpose(my_proj["lwssamps"])
 
     # Load the site locations
-    locationfile = os.path.join(os.path.dirname(__file__), locationfilename)
-    (_, site_ids, site_lats, site_lons) = ReadLocationFile(locationfile)
+    (_, site_ids, site_lats, site_lons) = ReadLocationFile(location_file)
 
     # Initialize variable to hold the localized projections
     nsamps = lwssamps.shape[0]
 
     # Apply the fingerprints
-    fpfile = os.path.join(os.path.dirname(__file__), "REL_GROUNDWATER_NOMASK.nc")
-    fpsites = da.array(AssignFP(fpfile, site_lats, site_lons))
+    # fp_file = os.path.join(os.path.dirname(__file__), "REL_GROUNDWATER_NOMASK.nc")
+    fpsites = da.array(AssignFP(fp_file, site_lats, site_lons))
     fpsites = fpsites.rechunk(chunksize)
 
     # Calculate the local sl samples

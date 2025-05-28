@@ -26,6 +26,10 @@ Note: %PIPELINE_ID% is replaced with 'pipeline_id' at run time
 
 
 def ssp_preprocess_landwaterstorage(
+    pophist_file,
+    reservoir_file,
+    popscen_file,
+    gwd_files,
     scen,
     dotriangular,
     includepokhrel,
@@ -43,24 +47,22 @@ def ssp_preprocess_landwaterstorage(
     yrs = np.arange(pyear_start, pyear_end + 1, pyear_step)  # target years projections
     yrs = np.union1d(yrs, baseyear)
 
-    # paths to data
-    datadir = os.path.dirname(__file__)
-    pophistfile = "UNWPP2012 population historical.csv"
-    reservoirfile = "Chao2008 groundwater impoundment.csv"
-    gwdfiles = ["Konikow2011 GWD.csv", "Wada2012 GWD.csv", "Pokhrel2012 GWD.csv"]
-    popscenfile = "ssp_iam_baseline_popscenarios2100.csv"
+    # # paths to data
+    # pophist_file = "UNWPP2012 population historical.csv"
+    # reservoir_file = "Chao2008 groundwater impoundment.csv"
+    # gwd_files = ["Konikow2011 GWD.csv", "Wada2012 GWD.csv", "Pokhrel2012 GWD.csv"]
+    # popscen_file = "ssp_iam_baseline_popscenarios2100.csv"
 
-    if len(gwdfiles) != 3:
+    if len(gwd_files) != 3:
         dotriangular = 0
 
     ##################################################
     # read population history .csv file
-    pophistfile = os.path.join(datadir, pophistfile)
-    with open(pophistfile, "r", newline="") as csvfile:
+    with open(pophist_file, "r", newline="") as csvfile:
         popdata = csv.reader(csvfile)
         row_count = sum(1 for row in popdata)
 
-    with open(pophistfile, "r", newline="") as csvfile:
+    with open(pophist_file, "r", newline="") as csvfile:
         popdata = csv.reader(csvfile)
         _ = next(popdata)
         i = 0
@@ -81,12 +83,11 @@ def ssp_preprocess_landwaterstorage(
 
     ##################################################
     # read reservoir impoundment .csv file
-    reservoirfile = os.path.join(datadir, reservoirfile)
-    with open(reservoirfile, "r", newline="") as csvfile:
+    with open(reservoir_file, "r", newline="") as csvfile:
         damdata = csv.reader(csvfile)
         row_count = sum(1 for row in damdata)
 
-    with open(reservoirfile, "r", newline="") as csvfile:
+    with open(reservoir_file, "r", newline="") as csvfile:
         damdata = csv.reader(csvfile)
         _ = next(damdata)
         i = 0
@@ -109,15 +110,14 @@ def ssp_preprocess_landwaterstorage(
         return row_count
 
     # Count the lines in all the GWD files
-    gwdfiles_full = [os.path.join(datadir, f) for f in gwdfiles]
-    nlines = [countlines(f) for f in gwdfiles_full]
+    nlines = [countlines(f) for f in gwd_files]
 
     # Initialize a multi-dimensional array to store GWD data
-    gwd = np.full((len(gwdfiles_full), np.max(nlines)), np.nan)
-    tgwd = np.full((len(gwdfiles_full), np.max(nlines)), np.nan)
+    gwd = np.full((len(gwd_files), np.max(nlines)), np.nan)
+    tgwd = np.full((len(gwd_files), np.max(nlines)), np.nan)
 
     for j in np.arange(0, 2 + includepokhrel):  # for different datasets
-        path = gwdfiles_full[j]
+        path = gwd_files[j]
         with open(path, "r", newline="") as csvfile:
             gwddata = csv.reader(csvfile)
             _ = next(gwddata)
@@ -130,12 +130,11 @@ def ssp_preprocess_landwaterstorage(
 
     ##################################################
     # read population scenarios .csv file
-    popscenfile = os.path.join(datadir, popscenfile)
-    with open(popscenfile, "r", newline="") as csvfile:
+    with open(popscen_file, "r", newline="") as csvfile:
         popdata = csv.reader(csvfile)
         row_count = sum(1 for row in popdata)
 
-    with open(popscenfile, "r", newline="") as csvfile:
+    with open(popscen_file, "r", newline="") as csvfile:
         popdata = csv.reader(csvfile)
         _ = next(popdata)
         i = 0

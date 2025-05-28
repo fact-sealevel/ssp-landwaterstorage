@@ -24,6 +24,51 @@ import click
     required=True,
 )
 @click.option(
+    "--pophist-file",
+    envvar="SSP_LANDWATERSTORAGE_POPHIST_FILE",
+    help="Path to the historical population file.",
+    required=True,
+    type=str,
+)
+@click.option(
+    "--reservoir-file",
+    envvar="SSP_LANDWATERSTORAGE_RESERVOIR_FILE",
+    help="Path to the groundwater impoundment file.",
+    required=True,
+    type=str,
+)
+@click.option(
+    "--popscen-file",
+    envvar="SSP_LANDWATERSTORAGE_POPSCEN_FILE",
+    help="Path to the population scenario file.",
+    required=True,
+    type=str,
+)
+@click.option(
+    "gwd_files",
+    "--gwd-file",
+    envvar="SSP_LANDWATERSTORAGE_GWD_FILES",
+    help="Path to groundwater depletion file.",
+    multiple=True,
+    type=str,
+    required=True,
+)
+@click.option(
+    "--fp-file",
+    envvar="SSP_LANDWATERSTORAGE_FP_FILE",
+    help="Path to fingerprint file.",
+    type=str,
+    required=True,
+)
+@click.option(
+    "--location-file",
+    envvar="SSP_LANDWATERSTORAGE_LOCATION_FILE",
+    help="File containing name, id, lat, and lon of points for localization.",
+    type=str,
+    required=True,
+    # default="location.lst",
+)
+@click.option(
     "--scenario",
     envvar="SSP_LANDWATERSTORAGE_SCENARIO",
     help="Use RCP or SSP scenario.",
@@ -106,18 +151,17 @@ import click
     default=0.0,
 )
 @click.option(
-    "--locationfile",
-    envvar="SSP_LANDWATERSTORAGE_LOCATIONFILE",
-    help="File container name, id, lat, and lon of points for localization.",
-    default="location.lst",
-)
-@click.option(
     "--chunksize",
     envvar="SSP_LANDWATERSTORAGE_CHUNKSIZE",
     help="Number of locations to process at a time.",
     default=50,
 )
 def main(
+    pophist_file,
+    reservoir_file,
+    popscen_file,
+    gwd_files,
+    fp_file,
     scenario,
     dotriangular,
     includepokherl,
@@ -132,7 +176,7 @@ def main(
     dcyear_end,
     dcrate_lo,
     dcrate_hi,
-    locationfile,
+    location_file,
     chunksize,
 ) -> None:
     """
@@ -140,6 +184,10 @@ def main(
     """
     click.echo("Hello from ssp-landwaterstorage!")
     ssp_preprocess_landwaterstorage(
+        pophist_file,
+        reservoir_file,
+        popscen_file,
+        gwd_files,
         scenario,
         dotriangular,
         includepokherl,
@@ -153,4 +201,4 @@ def main(
     ssp_project_landwaterstorage(
         nsamps, seed, dcyear_start, dcyear_end, dcrate_lo, dcrate_hi, pipeline_id
     )
-    ssp_postprocess_landwaterstorage(locationfile, chunksize, pipeline_id)
+    ssp_postprocess_landwaterstorage(fp_file, location_file, chunksize, pipeline_id)

@@ -24,6 +24,20 @@ import click
     required=True,
 )
 @click.option(
+    "--output-gslr-file",
+    envvar="SSP_LANDWATERSTORAGE_OUTPUT_GSLR_FILE",
+    help="Path to write output global SLR file.",
+    required=True,
+    type=str,
+)
+@click.option(
+    "--output-lslr-file",
+    envvar="SSP_LANDWATERSTORAGE_OUTPUT_LSLR_FILE",
+    help="Path to write output local SLR file.",
+    required=True,
+    type=str,
+)
+@click.option(
     "--pophist-file",
     envvar="SSP_LANDWATERSTORAGE_POPHIST_FILE",
     help="Path to the historical population file.",
@@ -178,12 +192,14 @@ def main(
     dcrate_hi,
     location_file,
     chunksize,
+    output_gslr_file,
+    output_lslr_file,
 ) -> None:
     """
     Project groundwater depletion and dam impoundment contributions to sea level. See IPCC AR6 WG1 9.6.3.2.6.
     """
     click.echo("Hello from ssp-landwaterstorage!")
-    ssp_preprocess_landwaterstorage(
+    out_data, out_conf = ssp_preprocess_landwaterstorage(
         pophist_file,
         reservoir_file,
         popscen_file,
@@ -197,8 +213,19 @@ def main(
         pyear_step,
         pipeline_id,
     )
-    ssp_fit_landwaterstorage(pipeline_id)
-    ssp_project_landwaterstorage(
-        nsamps, seed, dcyear_start, dcyear_end, dcrate_lo, dcrate_hi, pipeline_id
+    out_fit = ssp_fit_landwaterstorage(out_data, out_conf, pipeline_id)
+    out_proj = ssp_project_landwaterstorage(
+        out_fit,
+        out_conf,
+        nsamps,
+        seed,
+        dcyear_start,
+        dcyear_end,
+        dcrate_lo,
+        dcrate_hi,
+        pipeline_id,
+        output_gslr_file,
     )
-    ssp_postprocess_landwaterstorage(fp_file, location_file, chunksize, pipeline_id)
+    ssp_postprocess_landwaterstorage(
+        out_proj, fp_file, location_file, chunksize, pipeline_id, output_lslr_file
+    )

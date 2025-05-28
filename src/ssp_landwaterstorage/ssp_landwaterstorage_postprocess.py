@@ -1,5 +1,4 @@
 import numpy as np
-import pickle
 import argparse
 import time
 from ssp_landwaterstorage.read_locationfile import ReadLocationFile
@@ -22,19 +21,9 @@ Output: NetCDF file containing the local sea-level rise projections
 """
 
 
-def ssp_postprocess_landwaterstorage(fp_file, location_file, chunksize, pipeline_id):
-    # Load the configuration file
-    projfile = "{}_projections.pkl".format(pipeline_id)
-    try:
-        f = open(projfile, "rb")
-    except Exception as e:
-        print(f"Cannot open projection file {projfile}\n")
-        raise e
-
-    # Extract the configuration variables
-    my_proj = pickle.load(f)
-    f.close()
-
+def ssp_postprocess_landwaterstorage(
+    my_proj, fp_file, location_file, chunksize, pipeline_id, nc_filename
+):
     targyears = my_proj["years"]
     scenario = my_proj["scen"]
     baseyear = my_proj["baseyear"]
@@ -85,7 +74,7 @@ def ssp_postprocess_landwaterstorage(fp_file, location_file, chunksize, pipeline
     )
 
     lws_out.to_netcdf(
-        "{0}_localsl.nc".format(pipeline_id),
+        nc_filename,
         encoding={
             "sea_level_change": {
                 "dtype": "f4",

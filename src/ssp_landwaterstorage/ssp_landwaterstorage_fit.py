@@ -3,8 +3,6 @@ from numpy import matlib as mb
 from scipy.optimize import curve_fit
 from scipy.special import erf
 import argparse
-import pickle
-import os
 
 """ ssp_fit_landwaterstorage.py
 
@@ -124,19 +122,7 @@ def extend_pop(popscen, popscenyrs):
     return (popscen, popscenyrs)
 
 
-def ssp_fit_landwaterstorage(pipeline_id):
-    # Load the data file
-    datafile = "{}_data.pkl".format(pipeline_id)
-    try:
-        f = open(datafile, "rb")
-    except Exception as e:
-        print("Cannot open data file\n")
-        raise e
-
-    # Extract the data variables
-    my_data = pickle.load(f)
-    f.close()
-
+def ssp_fit_landwaterstorage(my_data, my_config, pipeline_id):
     t = my_data["t"]
     pop = my_data["pop"]
     tdams = my_data["tdams"]
@@ -145,18 +131,6 @@ def ssp_fit_landwaterstorage(pipeline_id):
     gwds = my_data["gwd"]
     popscenyr = my_data["popscenyr"]
     popscen = my_data["popscen"]
-
-    # Load the configuration file
-    configfile = "{}_config.pkl".format(pipeline_id)
-    try:
-        f = open(configfile, "rb")
-    except Exception as e:
-        print("Cannot open config file\n")
-        raise e
-
-    # Extract the configuration variables
-    my_config = pickle.load(f)
-    f.close()
 
     t0 = my_config["t0"]
     pop0 = my_config["pop0"]
@@ -268,11 +242,7 @@ def ssp_fit_landwaterstorage(pipeline_id):
         "mean_dgwd_dt_dpop": mean_dgwd_dt_dpop,
         "std_dgwd_dt_dpop": std_dgwd_dt_dpop,
     }
-    outfile = open(
-        os.path.join(os.path.dirname(__file__), "{}_fit.pkl".format(pipeline_id)), "wb"
-    )
-    pickle.dump(output, outfile)
-    outfile.close()
+    return output
 
 
 if __name__ == "__main__":

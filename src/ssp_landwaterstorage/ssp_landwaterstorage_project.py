@@ -4,8 +4,6 @@ import numpy as np
 from scipy.stats import norm
 from scipy.special import erf
 import argparse
-import os
-import pickle
 import time
 import sys
 from netCDF4 import Dataset
@@ -30,38 +28,23 @@ Output:
 
 
 def ssp_project_landwaterstorage(
-    Nsamps, rng_seed, dcyear_start, dcyear_end, dcrate_lo, dcrate_hi, pipeline_id
+    my_fit,
+    my_config,
+    Nsamps,
+    rng_seed,
+    dcyear_start,
+    dcyear_end,
+    dcrate_lo,
+    dcrate_hi,
+    pipeline_id,
+    nc_filename,
 ):
-    # Load the fit file
-    fitfile = "{}_fit.pkl".format(pipeline_id)
-    try:
-        f = open(fitfile, "rb")
-    except Exception as e:
-        print("Cannot open fit file\n")
-        raise e
-
-    # Extract the fit variables
-    my_fit = pickle.load(f)
-    f.close()
-
     popscen = my_fit["popscen"]
     popscenyr = my_fit["popscenyr"]
     # popscenids = my_fit['popscenids']
     dams_popt = my_fit["dams_popt"]
     mean_dgwd_dt_dpop = my_fit["mean_dgwd_dt_dpop"]
     std_dgwd_dt_dpop = my_fit["std_dgwd_dt_dpop"]
-
-    # Load the configuration file
-    configfile = "{}_config.pkl".format(pipeline_id)
-    try:
-        f = open(configfile, "rb")
-    except Exception as e:
-        print("Cannot open config file\n")
-        raise e
-
-    # Extract the configuration variables
-    my_config = pickle.load(f)
-    f.close()
 
     t0 = my_config["t0"]
     pop0 = my_config["pop0"]
@@ -259,32 +242,20 @@ def ssp_project_landwaterstorage(
     targyear_idx = np.isin(yrs, targyears)
     lwssamps = lwssamps[targyear_idx, :]
 
-    # Store the variables in a pickle
     output = {
         "lwssamps": lwssamps,
         "years": targyears,
         "scen": scen,
         "baseyear": baseyear,
     }
-    outfile = open(
-        os.path.join(
-            os.path.dirname(__file__), "{}_projections.pkl".format(pipeline_id)
-        ),
-        "wb",
-    )
-    pickle.dump(output, outfile)
-    outfile.close()
 
     # Write the total global projections to a netcdf file
-    nc_filename = os.path.join(
-        os.path.dirname(__file__), "{}_globalsl.nc".format(pipeline_id)
-    )
     rootgrp = Dataset(nc_filename, "w", format="NETCDF4")
 
     # Define Dimensions
-    year_dim = rootgrp.createDimension("years", len(targyears))
-    samp_dim = rootgrp.createDimension("samples", Nsamps)
-    loc_dim = rootgrp.createDimension("locations", 1)
+    _year_dim = rootgrp.createDimension("years", len(targyears))
+    _samp_dim = rootgrp.createDimension("samples", Nsamps)
+    _loc_dim = rootgrp.createDimension("locations", 1)
 
     # Populate dimension variables
     year_var = rootgrp.createVariable("years", "i4", ("years",))
@@ -320,6 +291,8 @@ def ssp_project_landwaterstorage(
 
     # Close the netcdf
     rootgrp.close()
+
+    return output
 
 
 if __name__ == "__main__":

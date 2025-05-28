@@ -1,8 +1,6 @@
 import numpy as np
 import csv
 import argparse
-import pickle
-import os
 
 """ ssp_preprocess_landwaterstorage.py
 
@@ -159,14 +157,8 @@ def ssp_preprocess_landwaterstorage(
         "popscenyr": popscenyr,
     }
 
-    # Write the data to a file
-    outdir = os.path.dirname(__file__)
-    outfile = open(os.path.join(outdir, "{}_data.pkl".format(pipeline_id)), "wb")
-    pickle.dump(output, outfile)
-    outfile.close()
-
     # Store the configuration in a pickle
-    output = {
+    output_conf = {
         "dgwd_dt_dpop_pcterr": dgwd_dt_dpop_pcterr,
         "dam_pcterr": dam_pcterr,
         "yrs": yrs,
@@ -179,11 +171,7 @@ def ssp_preprocess_landwaterstorage(
         "targyears": yrs,
     }
 
-    # Write the data to a file
-    outdir = os.path.dirname(__file__)
-    outfile = open(os.path.join(outdir, "{}_config.pkl".format(pipeline_id)), "wb")
-    pickle.dump(output, outfile)
-    outfile.close()
+    return output, output_conf
 
 
 if __name__ == "__main__":

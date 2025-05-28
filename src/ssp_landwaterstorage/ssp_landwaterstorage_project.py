@@ -281,6 +281,11 @@ def ssp_project_landwaterstorage(
     )
     rootgrp = Dataset(nc_filename, "w", format="NETCDF4")
 
+    # Define Dimensions
+    year_dim = rootgrp.createDimension("years", len(targyears))
+    samp_dim = rootgrp.createDimension("samples", Nsamps)
+    loc_dim = rootgrp.createDimension("locations", 1)
+
     # Populate dimension variables
     year_var = rootgrp.createVariable("years", "i4", ("years",))
     samp_var = rootgrp.createVariable("samples", "i8", ("samples",))

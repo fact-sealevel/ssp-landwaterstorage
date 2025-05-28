@@ -6,7 +6,7 @@ docker buildx build -t ssp-landwaterstorage:dev .
 
 docker container run --rm ssp-landwaterstorage:dev --help
 
-docker container run -t --rm \
+docker container run --rm \
     -v ./data/input:/mnt/ssp_lws_in:ro \
     -v ./data/output:/mnt/ssp_lws_out \
     --env-file .env \

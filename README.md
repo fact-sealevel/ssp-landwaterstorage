@@ -27,7 +27,7 @@ Now run the container, for example with Docker, like
 docker run --rm \
     -v ./data/input:/mnt/ssp_lws_in:ro \
     -v ./data/output:/mnt/ssp_lws_out \
-    ssp-landwaterstorage:dev \
+    ghcr.io/stcaf-org/ssp-landwaterstorage:0.1.0 \
     --pipeline-id=1234 \
     --output-gslr-file="/mnt/ssp_lws_out/output_gslr.nc" \
     --output-lslr-file="/mnt/ssp_lws_out/output_lslr.nc" \
@@ -91,7 +91,7 @@ Options:
 
 See this help documentation by running:
 ```shell
-docker run --rm ssp-landwaterstorage:dev --help
+docker run --rm ghcr.io/stcaf-org/ssp-landwaterstorage:0.1.0 --help
 ```
 
 These options and configurations can also be set with environment variables prefixed by `SSP_LANDWATERSTORAGE_*`. For example, set `--pophist-file` with as an environment variable with `SSP_LANDWATERSTORAGE_POPHIST_FILE`.

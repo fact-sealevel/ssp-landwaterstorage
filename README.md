@@ -1,5 +1,7 @@
 # ssp_landwaterstorage
 
+Containerized application projecting groundwater depletion and dam impoundment contributions to sea level. See IPCC AR6 WG1 9.6.3.2.6.
+
 Build the ssp-landwaterstorage container from this repository by cloning the repository and running
 
 ```shell

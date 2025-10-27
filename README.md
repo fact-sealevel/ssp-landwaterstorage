@@ -1,5 +1,9 @@
 # ssp-landwaterstorage
 
+[![Python package](https://github.com/fact-sealevel/ssp-landwaterstorage/actions/workflows/pythonpackage.yaml/badge.svg)](https://github.com/fact-sealevel/ssp-landwaterstorage/actions/workflows/pythonpackage.yaml)
+[![codecov](https://codecov.io/gh/fact-sealevel/ssp-landwaterstorage/graph/badge.svg?token=ES5JBD7OBQ)](https://codecov.io/gh/fact-sealevel/ssp-landwaterstorage)
+[![container](https://github.com/fact-sealevel/ssp-landwaterstorage/actions/workflows/container.yaml/badge.svg)](https://github.com/fact-sealevel/ssp-landwaterstorage/actions/workflows/container.yaml)
+
 Containerized application projecting groundwater depletion and dam impoundment contributions to sea level. See IPCC AR6 WG1 9.6.3.2.6.
 
 > [!CAUTION]

@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Automated testing and coverage reporting in CI.
+- Automated testing and coverage reporting in CI. Status badges on README.
 
 ### Fixed
 

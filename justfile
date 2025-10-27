@@ -4,4 +4,7 @@ format:
 lint:
 	uv run ruff check --fix
 
-validate: format lint
+test:
+	uv run pytest --verbose --color=yes tests
+
+validate: format lint test

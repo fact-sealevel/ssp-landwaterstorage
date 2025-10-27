@@ -27,7 +27,7 @@ Now run the container, for example with Docker, like
 docker run --rm \
     -v ./data/input:/mnt/ssp_lws_in:ro \
     -v ./data/output:/mnt/ssp_lws_out \
-    ghcr.io/stcaf-org/ssp-landwaterstorage:0.1.0 \
+    ghcr.io/facts-sealevel/ssp-landwaterstorage:latest \
     --pipeline-id=1234 \
     --output-gslr-file="/mnt/ssp_lws_out/output_gslr.nc" \
     --output-lslr-file="/mnt/ssp_lws_out/output_lslr.nc" \
@@ -40,6 +40,9 @@ docker run --rm \
     --gwd-file="/mnt/ssp_lws_in/Pokhrel2012 GWD.csv" \
     --fp-file="/mnt/ssp_lws_in/REL_GROUNDWATER_NOMASK.nc"
 ```
+
+> [!TIP]
+> For this example we use `ghcr.io/fact-sealevel/ssp-landwaterstorage:latest`. We do not recommend using `latest` for production runs because it will grab the latest release. This means runs will not be reproducible and may include breaking changes. Instead, use a tag for a specific version of the image or an image's digest hash. You can find tagged image versions and digests [here](https://github.com/fact-sealevel/ssp-landwaterstorage/pkgs/container/ssp-landwaterstorage).
 
 ## Features
 
@@ -91,7 +94,7 @@ Options:
 
 See this help documentation by running:
 ```shell
-docker run --rm ghcr.io/stcaf-org/ssp-landwaterstorage:0.1.0 --help
+docker run --rm ghcr.io/fact-sealevel/ssp-landwaterstorage:latest --help
 ```
 
 These options and configurations can also be set with environment variables prefixed by `SSP_LANDWATERSTORAGE_*`. For example, set `--pophist-file` with as an environment variable with `SSP_LANDWATERSTORAGE_POPHIST_FILE`.
@@ -108,6 +111,6 @@ from the repository root.
 
 ## Support
 
-Source code is available online at https://github.com/stcaf-org/ssp-landwaterstorage. This software is open source and available under the MIT license.
+Source code is available online at https://github.com/fact-sealevel/ssp-landwaterstorage. This software is open source and available under the MIT license.
 
-Please file issues in the issue tracker at https://github.com/stcaf-org/ssp-landwaterstorage/issues.
+Please file issues in the issue tracker at https://github.com/fact-sealevel/ssp-landwaterstorage/issues.

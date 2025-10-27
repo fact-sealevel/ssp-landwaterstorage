@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Automated testing and coverage reporting in CI.
+
 ### Fixed
 
 - Bad release hyperlinks in CHANGELOG.

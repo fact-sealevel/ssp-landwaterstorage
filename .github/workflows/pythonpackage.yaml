@@ -38,3 +38,13 @@ jobs:
       - name: Lint check with ruff
         run: |
           uv run ruff check . --output-format=github
+
+      - name: Test with pytest
+        run: |
+          uv run pytest -vv --cov-branch --cov-report term-missing --cov-report xml --cov ssp_landwaterstorage
+
+      - name: Upload coverage reports to Codecov
+        uses: codecov/codecov-action@v5
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          slug: fact-sealevel/ssp-landwaterstorage

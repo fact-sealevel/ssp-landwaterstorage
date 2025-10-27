@@ -9,7 +9,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- Update README to use public `ghcr.io/stcaf-org/ssp-landwaterstorage` container image.
+- Update docs to use public `ghcr.io/fact-sealevel/ssp-landwaterstorage` container image at new host Github organization. THIS IS A BREAKING CHANGE.
+
+- Update README and docs to use new repository URL at github.com/fact-sealevel/ssp-landwaterstorage.
 
 
 ## [0.1.0] - 2025-06-03
@@ -17,5 +19,5 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Initial release.
 
 
-[Unreleased]: https://github.com/stcaf-org/ssp-landwaterstorage/compare/v0.1.0...HEAD
-[0.1.0]: https://github.com/stcaf-org/ssp-landwaterstorage/releases/tag/v0.1.0
+[Unreleased]: https://github.com/fact-sealevel/ssp-landwaterstorage/compare/v0.1.0...HEAD
+[0.1.0]: https://github.com/fact-sealevel/ssp-landwaterstorage/releases/tag/v0.1.0

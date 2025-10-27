@@ -2,7 +2,6 @@ import numpy as np
 from numpy import matlib as mb
 from scipy.optimize import curve_fit
 from scipy.special import erf
-import argparse
 
 """ ssp_fit_landwaterstorage.py
 
@@ -243,23 +242,3 @@ def ssp_fit_landwaterstorage(my_data, my_config, pipeline_id):
         "std_dgwd_dt_dpop": std_dgwd_dt_dpop,
     }
     return output
-
-
-if __name__ == "__main__":
-    # Initialize the command-line argument parser
-    parser = argparse.ArgumentParser(
-        description="Run the land water storage fitting stage for the SSP LWS SLR projection workflow",
-        epilog="Note: This is meant to be run as part of the SSP LWS module within the Framework for the Assessment of Changes To Sea-level (FACTS)",
-    )
-
-    # Define the command line arguments to be expected
-    parser.add_argument(
-        "--pipeline_id", help="Unique identifier for this instance of the module"
-    )
-
-    # Parse the arguments
-    args = parser.parse_args()
-
-    # Run the preprocessing stage with the provided arguments
-    ssp_fit_landwaterstorage(args.pipeline_id)
-    exit()

@@ -1,5 +1,4 @@
 import numpy as np
-import argparse
 import time
 from ssp_landwaterstorage.read_locationfile import ReadLocationFile
 from ssp_landwaterstorage.AssignFP import AssignFP
@@ -86,37 +85,3 @@ def ssp_postprocess_landwaterstorage(
     )
 
     return None
-
-
-if __name__ == "__main__":
-    # Initialize the command-line argument parser
-    parser = argparse.ArgumentParser(
-        description="Run the land water storage postprocessing stage from the SSP module set",
-        epilog="Note: This is meant to be run as part of the SSP module set within the Framework for the Assessment of Changes To Sea-level (FACTS)",
-    )
-
-    # Define the command line arguments to be expected
-    parser.add_argument(
-        "--locationfile",
-        help="File that contains name, id, lat, and lon of points for localization",
-        default="location.lst",
-    )
-    parser.add_argument(
-        "--chunksize",
-        help="Number of locations to process at a time [default=50]",
-        type=int,
-        default=50,
-    )
-    parser.add_argument(
-        "--pipeline_id", help="Unique identifier for this instance of the module"
-    )
-
-    # Parse the arguments
-    args = parser.parse_args()
-
-    # Run the projection process on the files specified from the command line argument
-    ssp_postprocess_landwaterstorage(
-        args.locationfile, args.chunksize, args.pipeline_id
-    )
-
-    exit()

@@ -3,9 +3,7 @@ import numpy as np
 # import ntpath
 from scipy.stats import norm
 from scipy.special import erf
-import argparse
 import time
-import sys
 from netCDF4 import Dataset
 
 """ ssp_project_landwaterstorage.py
@@ -293,70 +291,3 @@ def ssp_project_landwaterstorage(
     rootgrp.close()
 
     return output
-
-
-if __name__ == "__main__":
-    # Initialize the command-line argument parser
-    parser = argparse.ArgumentParser(
-        description="Run the land water storage projection stage for the SSP LWS SLR projection workflow",
-        epilog="Note: This is meant to be run as part of the SSP LWS module within the Framework for the Assessment of Changes To Sea-level (FACTS)",
-    )
-
-    # Define the command line arguments to be expected
-    parser.add_argument(
-        "--nsamps",
-        "-n",
-        help="Number of samples to generate [default=20000]",
-        default=20000,
-        type=int,
-    )
-    parser.add_argument(
-        "--seed",
-        "-s",
-        help="Seed value for random number generator [default=1234]",
-        default=1234,
-        type=int,
-    )
-    parser.add_argument(
-        "--pipeline_id", help="Unique identifier for this instance of the module"
-    )
-    parser.add_argument(
-        "--dcyear_start",
-        help="Year in which dam correction application is started [default=2020]",
-        default=2020,
-        type=int,
-    )
-    parser.add_argument(
-        "--dcyear_end",
-        help="Year in which dam correction application is ended [default=2040]",
-        default=2040,
-        type=int,
-    )
-    parser.add_argument(
-        "--dcrate_lo",
-        help="Lower bound of dam correction rate [default=0.0]",
-        default=0.0,
-        type=float,
-    )
-    parser.add_argument(
-        "--dcrate_hi",
-        help="Upper bound of dam correction rate [default=0.0]",
-        default=0.0,
-        type=float,
-    )
-
-    # Parse the arguments
-    args = parser.parse_args()
-
-    # Run the preprocessing stage with the provided arguments
-    ssp_project_landwaterstorage(
-        args.nsamps,
-        args.seed,
-        args.dcyear_start,
-        args.dcyear_end,
-        args.dcrate_lo,
-        args.dcrate_hi,
-        args.pipeline_id,
-    )
-
-    sys.exit()

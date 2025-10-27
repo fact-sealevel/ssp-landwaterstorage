@@ -13,6 +13,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Update README and docs to use new repository URL at github.com/fact-sealevel/ssp-landwaterstorage.
 
+- Build multiplatform container images. We're now experimenting with support for linux/arm64, in addition to linux/amd64.
+
 
 ## [0.1.0] - 2025-06-03
 

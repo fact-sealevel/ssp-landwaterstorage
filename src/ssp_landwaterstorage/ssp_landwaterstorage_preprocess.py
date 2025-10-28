@@ -1,5 +1,11 @@
 import numpy as np
-import csv
+
+from ssp_landwaterstorage.io import (
+    read_population_history,
+    read_population_scenarios,
+    read_reservoir_impoundment,
+    read_groundwater_depletion,
+)
 
 """ ssp_preprocess_landwaterstorage.py
 
@@ -29,12 +35,10 @@ def ssp_preprocess_landwaterstorage(
     gwd_files,
     scen,
     dotriangular,
-    includepokhrel,
     baseyear,
     pyear_start,
     pyear_end,
     pyear_step,
-    pipeline_id,
 ):
     ##################################################
     # configure run (could be separate script)
@@ -53,107 +57,22 @@ def ssp_preprocess_landwaterstorage(
     if len(gwd_files) != 3:
         dotriangular = 0
 
-    ##################################################
-    # read population history .csv file
-    with open(pophist_file, "r", newline="") as csvfile:
-        popdata = csv.reader(csvfile)
-        row_count = sum(1 for row in popdata)
-
-    with open(pophist_file, "r", newline="") as csvfile:
-        popdata = csv.reader(csvfile)
-        _ = next(popdata)
-        i = 0
-        t = np.zeros(row_count - 1)
-        pop = np.zeros(row_count - 1)
-
-        for row in popdata:
-            t[i] = row[0]  # store years
-            pop[i] = row[1]  # store population
-            i += 1
-
-    t0 = t
-    pop0 = pop
-
-    # sample with 5 year steps
-    t = t[::5]
-    pop = pop[::5]
-
-    ##################################################
-    # read reservoir impoundment .csv file
-    with open(reservoir_file, "r", newline="") as csvfile:
-        damdata = csv.reader(csvfile)
-        row_count = sum(1 for row in damdata)
-
-    with open(reservoir_file, "r", newline="") as csvfile:
-        damdata = csv.reader(csvfile)
-        _ = next(damdata)
-        i = 0
-        tdams = dams = np.zeros(row_count - 1)
-        dams = np.zeros(row_count - 1)
-
-        for row in damdata:
-            tdams[i] = row[0]  # store years
-            dams[i] = row[1]  # store reservoir impoundment
-            i += 1
-
-    ##################################################
-    # read groundwater depletion .csv files
-
-    # Define function to count lines in a .csv file
-    def countlines(f):
-        with open(f, "r", newline="") as csvfile:
-            gwddata = csv.reader(csvfile)
-            row_count = sum(1 for row in gwddata)
-        return row_count
-
-    # Count the lines in all the GWD files
-    nlines = [countlines(f) for f in gwd_files]
-
-    # Initialize a multi-dimensional array to store GWD data
-    gwd = np.full((len(gwd_files), np.max(nlines)), np.nan)
-    tgwd = np.full((len(gwd_files), np.max(nlines)), np.nan)
-
-    for j in np.arange(0, 2 + includepokhrel):  # for different datasets
-        path = gwd_files[j]
-        with open(path, "r", newline="") as csvfile:
-            gwddata = csv.reader(csvfile)
-            _ = next(gwddata)
-            i = 0
-
-            for row in gwddata:
-                tgwd[j, i] = row[0]  # store years
-                gwd[j, i] = row[1]  # store gwd
-                i += 1
-
-    ##################################################
-    # read population scenarios .csv file
-    with open(popscen_file, "r", newline="") as csvfile:
-        popdata = csv.reader(csvfile)
-        row_count = sum(1 for row in popdata)
-
-    with open(popscen_file, "r", newline="") as csvfile:
-        popdata = csv.reader(csvfile)
-        _ = next(popdata)
-        i = 0
-        popscenyr = np.zeros(row_count - 1)
-        popscen = np.zeros([row_count - 1, 5])  # 5 SSPs
-
-        for row in popdata:
-            popscenyr[i] = row[0]  # store years
-            popscen[i, :] = row[1:6]  # store population projections
-            i += 1
+    pophist = read_population_history(pophist_file)
+    dams = read_reservoir_impoundment(reservoir_file)
+    gwd = read_groundwater_depletion(gwd_files)
+    popscen = read_population_scenarios(popscen_file)
 
     ###################################################
     # Store the data in a pickle
     output = {
-        "t": t,
-        "pop": pop,
-        "tdams": tdams,
-        "dams": dams,
-        "tgwd": tgwd,
-        "gwd": gwd,
-        "popscen": popscen,
-        "popscenyr": popscenyr,
+        "t": pophist.t,
+        "pop": pophist.pop,
+        "tdams": dams.t,
+        "dams": dams.impoundment,
+        "tgwd": gwd.t,
+        "gwd": gwd.depletion,
+        "popscen": popscen.scenarios,
+        "popscenyr": popscen.yr,
     }
 
     # Store the configuration in a pickle
@@ -163,9 +82,8 @@ def ssp_preprocess_landwaterstorage(
         "yrs": yrs,
         "scen": scen,
         "dotriangular": dotriangular,
-        "includepokhrel": includepokhrel,
-        "pop0": pop0,
-        "t0": t0,
+        "pop0": pophist.pop0,
+        "t0": pophist.t0,
         "baseyear": baseyear,
         "targyears": yrs,
     }

@@ -11,8 +11,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Automated testing and coverage reporting in CI. Status badges on README.
 
+### Changed
+
+- Removed the `--includepokherl` CLI option. This is a breaking change ([PR #8](https://github.com/fact-sealevel/ssp-landwaterstorage/pull/8); [@brews](https://github.com/brews)).
+- Heavy internal refactoring to improve code clarity and testability ([PR #8](https://github.com/fact-sealevel/ssp-landwaterstorage/pull/8); [@brews](https://github.com/brews)).
+
 ### Fixed
 
+- GWD files may not have been used when used with the `--includepokherl` option ([PR #8](https://github.com/fact-sealevel/ssp-landwaterstorage/pull/8); [@brews](https://github.com/brews)).
 - Bad release hyperlinks in CHANGELOG.
 
 

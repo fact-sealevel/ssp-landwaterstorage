@@ -1,10 +1,8 @@
 import numpy as np
-
-# import ntpath
 from scipy.stats import norm
 from scipy.special import erf
-import time
-from netCDF4 import Dataset
+
+from ssp_landwaterstorage.io import write_gslr
 
 """ ssp_project_landwaterstorage.py
 
@@ -247,47 +245,14 @@ def ssp_project_landwaterstorage(
         "baseyear": baseyear,
     }
 
-    # Write the total global projections to a netcdf file
-    rootgrp = Dataset(nc_filename, "w", format="NETCDF4")
-
-    # Define Dimensions
-    _year_dim = rootgrp.createDimension("years", len(targyears))
-    _samp_dim = rootgrp.createDimension("samples", Nsamps)
-    _loc_dim = rootgrp.createDimension("locations", 1)
-
-    # Populate dimension variables
-    year_var = rootgrp.createVariable("years", "i4", ("years",))
-    samp_var = rootgrp.createVariable("samples", "i8", ("samples",))
-    loc_var = rootgrp.createVariable("locations", "i8", ("locations",))
-    lat_var = rootgrp.createVariable("lat", "f4", ("locations",))
-    lon_var = rootgrp.createVariable("lon", "f4", ("locations",))
-
-    # Create a data variable
-    samps = rootgrp.createVariable(
-        "sea_level_change",
-        "f4",
-        ("samples", "years", "locations"),
-        zlib=True,
-        complevel=4,
+    write_gslr(
+        nc_filename,
+        targyears=targyears,
+        n_samps=Nsamps,
+        pipeline_id=pipeline_id,
+        baseyear=baseyear,
+        scenario=scen,
+        lwssamps=lwssamps,
     )
-
-    # Assign attributes
-    rootgrp.description = "Global SLR contribution from land water storage according to Kopp 2014 workflow"
-    rootgrp.history = "Created " + time.ctime(time.time())
-    rootgrp.source = "FACTS: {0}".format(pipeline_id)
-    rootgrp.baseyear = baseyear
-    rootgrp.scenario = scen
-    samps.units = "mm"
-
-    # Put the data into the netcdf variables
-    year_var[:] = targyears
-    samp_var[:] = np.arange(0, Nsamps)
-    samps[:, :, :] = lwssamps.T[:, :, np.newaxis]
-    lat_var[:] = np.inf
-    lon_var[:] = np.inf
-    loc_var[:] = -1
-
-    # Close the netcdf
-    rootgrp.close()
 
     return output

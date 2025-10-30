@@ -77,7 +77,6 @@ Options:
                                points for localization.  [required]
   --scenario TEXT              Use RCP or SSP scenario.
   --dotriangular BOOLEAN       Use triangular distribution for GWD.
-  --includepokherl BOOLEAN     Include Pokhrl data for GWD.
   --baseyear INTEGER RANGE     Base year to which projections are centered.
                                [2000<=x<=2010]
   --pyear-start INTEGER RANGE  Year for which projections start.  [x>=2000]

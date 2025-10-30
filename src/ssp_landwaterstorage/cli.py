@@ -95,12 +95,6 @@ import click
     default=False,
 )
 @click.option(
-    "--includepokherl",
-    envvar="SSP_LANDWATERSTORAGE_INCLUDEPOKHERL",
-    help="Include Pokhrl data for GWD.",
-    default=False,
-)
-@click.option(
     "--baseyear",
     envvar="SSP_LANDWATERSTORAGE_BASEYEAR",
     help="Base year to which projections are centered.",
@@ -178,7 +172,6 @@ def main(
     fp_file,
     scenario,
     dotriangular,
-    includepokherl,
     baseyear,
     pyear_start,
     pyear_end,
@@ -206,12 +199,10 @@ def main(
         gwd_files,
         scenario,
         dotriangular,
-        includepokherl,
         baseyear,
         pyear_start,
         pyear_end,
         pyear_step,
-        pipeline_id,
     )
     out_fit = ssp_fit_landwaterstorage(out_data, out_conf, pipeline_id)
     out_proj = ssp_project_landwaterstorage(

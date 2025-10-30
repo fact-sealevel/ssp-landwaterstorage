@@ -1,10 +1,7 @@
 import numpy as np
-import time
-from ssp_landwaterstorage.read_locationfile import ReadLocationFile
-from ssp_landwaterstorage.AssignFP import AssignFP
-
-import xarray as xr
 import dask.array as da
+
+from ssp_landwaterstorage.io import write_lslr, read_locations, read_fingerprints
 
 """ ssp_postprocess_landwaterstorage.py
 
@@ -29,59 +26,26 @@ def ssp_postprocess_landwaterstorage(
     lwssamps = np.transpose(my_proj["lwssamps"])
 
     # Load the site locations
-    (_, site_ids, site_lats, site_lons) = ReadLocationFile(location_file)
+    sites = read_locations(location_file)
 
     # Initialize variable to hold the localized projections
     nsamps = lwssamps.shape[0]
 
     # Apply the fingerprints
-    # fp_file = os.path.join(os.path.dirname(__file__), "REL_GROUNDWATER_NOMASK.nc")
-    fpsites = da.array(AssignFP(fp_file, site_lats, site_lons))
+    fpsites = da.array(read_fingerprints(fp_file).interpolate_coefficients(sites))
     fpsites = fpsites.rechunk(chunksize)
 
     # Calculate the local sl samples
     local_sl = np.multiply.outer(lwssamps, fpsites)
 
-    # Define the missing value for the netCDF files
-    nc_missing_value = np.nan  # np.iinfo(np.int16).min
-
-    # Create the xarray data structures for the localized projections
-    ncvar_attributes = {
-        "description": "Local SLR contributions from land water storage according to Kopp 2014 workflow",
-        "history": "Created " + time.ctime(time.time()),
-        "source": "SLR Framework: Kopp 2014 workflow",
-        "scenario": scenario,
-        "baseyear": baseyear,
-    }
-
-    lws_out = xr.Dataset(
-        {
-            "sea_level_change": (
-                ("samples", "years", "locations"),
-                local_sl,
-                {"units": "mm", "missing_value": nc_missing_value},
-            ),
-            "lat": (("locations"), site_lats),
-            "lon": (("locations"), site_lons),
-        },
-        coords={
-            "years": targyears,
-            "locations": site_ids,
-            "samples": np.arange(nsamps),
-        },
-        attrs=ncvar_attributes,
-    )
-
-    lws_out.to_netcdf(
+    write_lslr(
         nc_filename,
-        encoding={
-            "sea_level_change": {
-                "dtype": "f4",
-                "zlib": True,
-                "complevel": 4,
-                "_FillValue": nc_missing_value,
-            }
-        },
+        local_sl=local_sl,
+        targyears=targyears,
+        n_samps=nsamps,
+        baseyear=baseyear,
+        scenario=scenario,
+        locations=sites,
     )
 
     return None

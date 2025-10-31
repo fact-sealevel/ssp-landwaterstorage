@@ -2,16 +2,7 @@
 Services the UI provides to our lovely users.
 """
 
-from ssp_landwaterstorage.ssp_landwaterstorage_preprocess import (
-    ssp_preprocess_landwaterstorage,
-)
-from ssp_landwaterstorage.ssp_landwaterstorage_fit import ssp_fit_landwaterstorage
-from ssp_landwaterstorage.ssp_landwaterstorage_project import (
-    ssp_project_landwaterstorage,
-)
-from ssp_landwaterstorage.ssp_landwaterstorage_postprocess import (
-    ssp_postprocess_landwaterstorage,
-)
+from ssp_landwaterstorage.core import preprocess, fit, project, postprocess
 
 
 def project_landwaterstorage(
@@ -39,7 +30,7 @@ def project_landwaterstorage(
     output_lslr_file,
 ) -> None:
     """Project landwaterstorage"""
-    out_data, out_conf = ssp_preprocess_landwaterstorage(
+    out_data, out_conf = preprocess(
         pophist_file,
         reservoir_file,
         popscen_file,
@@ -51,8 +42,8 @@ def project_landwaterstorage(
         pyear_end,
         pyear_step,
     )
-    out_fit = ssp_fit_landwaterstorage(out_data, out_conf, pipeline_id)
-    out_proj = ssp_project_landwaterstorage(
+    out_fit = fit(out_data, out_conf, pipeline_id)
+    out_proj = project(
         out_fit,
         out_conf,
         nsamps,
@@ -64,6 +55,6 @@ def project_landwaterstorage(
         pipeline_id,
         output_gslr_file,
     )
-    ssp_postprocess_landwaterstorage(
+    postprocess(
         out_proj, fp_file, location_file, chunksize, pipeline_id, output_lslr_file
     )

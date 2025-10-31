@@ -12,17 +12,6 @@ from scipy.stats import norm
 from scipy.optimize import curve_fit
 from scipy.special import erf
 
-from ssp_landwaterstorage.io import (
-    read_fingerprints,
-    read_population_history,
-    read_population_scenarios,
-    read_locations,
-    read_reservoir_impoundment,
-    read_groundwater_depletion,
-    write_gslr,
-    write_lslr,
-)
-
 
 @dataclass
 class PopulationHistory:
@@ -90,10 +79,10 @@ class Fingerprints:
 
 
 def preprocess(
-    pophist_file,
-    reservoir_file,
-    popscen_file,
-    gwd_files,
+    pophist,
+    dams,
+    popscen,
+    gwd,
     scen,
     dotriangular,
     baseyear,
@@ -133,14 +122,6 @@ def preprocess(
     # reservoir_file = "Chao2008 groundwater impoundment.csv"
     # gwd_files = ["Konikow2011 GWD.csv", "Wada2012 GWD.csv", "Pokhrel2012 GWD.csv"]
     # popscen_file = "ssp_iam_baseline_popscenarios2100.csv"
-
-    if len(gwd_files) != 3:
-        dotriangular = 0
-
-    pophist = read_population_history(pophist_file)
-    dams = read_reservoir_impoundment(reservoir_file)
-    gwd = read_groundwater_depletion(gwd_files)
-    popscen = read_population_scenarios(popscen_file)
 
     ###################################################
     # Store the data in a pickle
@@ -419,8 +400,6 @@ def project(
     dcyear_end,
     dcrate_lo,
     dcrate_hi,
-    pipeline_id,
-    nc_filename,
 ):
     """ssp_project_landwaterstorage.py
 
@@ -441,7 +420,6 @@ def project(
     """
     popscen = my_fit["popscen"]
     popscenyr = my_fit["popscenyr"]
-    # popscenids = my_fit['popscenids']
     dams_popt = my_fit["dams_popt"]
     mean_dgwd_dt_dpop = my_fit["mean_dgwd_dt_dpop"]
     std_dgwd_dt_dpop = my_fit["std_dgwd_dt_dpop"]
@@ -642,27 +620,10 @@ def project(
     targyear_idx = np.isin(yrs, targyears)
     lwssamps = lwssamps[targyear_idx, :]
 
-    output = {
-        "lwssamps": lwssamps,
-        "years": targyears,
-        "scen": scen,
-        "baseyear": baseyear,
-    }
-
-    write_gslr(
-        nc_filename,
-        targyears=targyears,
-        n_samps=Nsamps,
-        pipeline_id=pipeline_id,
-        baseyear=baseyear,
-        scenario=scen,
-        lwssamps=lwssamps,
-    )
-
-    return output
+    return lwssamps
 
 
-def postprocess(my_proj, fp_file, location_file, chunksize, pipeline_id, nc_filename):
+def postprocess(lwssamps, fingerprints: Fingerprints, sites: Locations, chunksize):
     """ssp_postprocess_landwaterstorage.py
 
     This script runs the land water storage postprocessing task from the SSP module set.
@@ -673,34 +634,14 @@ def postprocess(my_proj, fp_file, location_file, chunksize, pipeline_id, nc_file
     pipeline_id = Unique identifier for the pipeline running this code
 
     Output: NetCDF file containing the local sea-level rise projections
-
     """
-    targyears = my_proj["years"]
-    scenario = my_proj["scen"]
-    baseyear = my_proj["baseyear"]
-    lwssamps = np.transpose(my_proj["lwssamps"])
-
-    # Load the site locations
-    sites = read_locations(location_file)
-
-    # Initialize variable to hold the localized projections
-    nsamps = lwssamps.shape[0]
+    lwssamps = np.transpose(lwssamps)
 
     # Apply the fingerprints
-    fpsites = da.array(read_fingerprints(fp_file).interpolate_coefficients(sites))
+    fpsites = da.array(fingerprints.interpolate_coefficients(sites))
     fpsites = fpsites.rechunk(chunksize)
 
     # Calculate the local sl samples
     local_sl = np.multiply.outer(lwssamps, fpsites)
 
-    write_lslr(
-        nc_filename,
-        local_sl=local_sl,
-        targyears=targyears,
-        n_samps=nsamps,
-        baseyear=baseyear,
-        scenario=scenario,
-        locations=sites,
-    )
-
-    return None
+    return local_sl

@@ -284,7 +284,6 @@ def fit(my_data, my_config, pipeline_id):
     yrs = my_config["yrs"]
     _ = my_config["scen"]
     dotriangular = my_config["dotriangular"]
-    includepokhrel = my_config["includepokhrel"]
 
     # interpolate reservoir years to population history years t0
     dams = np.interp(t0, tdams, dams)
@@ -304,7 +303,7 @@ def fit(my_data, my_config, pipeline_id):
     pop2gwd_all = []  # population
 
     # Loop over each of the GWD files' data
-    for i in np.arange(0, 2 + includepokhrel):
+    for i in np.arange(gwds.shape[0]):
         # Working with these particular data
         gwd = gwds[i, :]
         tgwd = tgwds[i, :]
@@ -433,7 +432,6 @@ def project(
     targyears = my_config["targyears"]
     scen = my_config["scen"]
     dotriangular = my_config["dotriangular"]
-    _ = my_config["includepokhrel"]
 
     # optimisation problem, least squares of fitting dams with sigmoidal function of population
     def sigmoidal(pop0, a, b, c, I0):

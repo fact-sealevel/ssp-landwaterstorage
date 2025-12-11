@@ -13,12 +13,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- Removed the `--includepokherl` CLI option. This is a breaking change ([PR #8](https://github.com/fact-sealevel/ssp-landwaterstorage/pull/8); [@brews](https://github.com/brews)).
+- Removed the `--includepokherl` CLI option. This is a breaking change ([PR #8](https://github.com/fact-sealevel/ssp-landwaterstorage/pull/8), [PR #10](https://github.com/fact-sealevel/ssp-landwaterstorage/pull/10); [@brews](https://github.com/brews)).
 - Heavy internal refactoring to improve code clarity and testability ([PR #8](https://github.com/fact-sealevel/ssp-landwaterstorage/pull/8), [PR #(9)](https://github.com/fact-sealevel/ssp-landwaterstorage/pull/9); [@brews](https://github.com/brews)).
 
 ### Fixed
 
-- GWD files may not have been used when used with the `--includepokherl` option ([PR #8](https://github.com/fact-sealevel/ssp-landwaterstorage/pull/8); [@brews](https://github.com/brews)).
+- GWD files may not have been used when used with the `--includepokherl` option ([PR #8](https://github.com/fact-sealevel/ssp-landwaterstorage/pull/8), [PR #10](https://github.com/fact-sealevel/ssp-landwaterstorage/pull/10); [@brews](https://github.com/brews)).
+- Fix bad container name in README example ([PR #10](https://github.com/fact-sealevel/ssp-landwaterstorage/pull/10); [@brews](https://github.com/brews)).
 - Bad release hyperlinks in CHANGELOG.
 
 

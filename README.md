@@ -31,7 +31,7 @@ Now run the container, for example with Docker, like
 docker run --rm \
     -v ./data/input:/mnt/ssp_lws_in:ro \
     -v ./data/output:/mnt/ssp_lws_out \
-    ghcr.io/facts-sealevel/ssp-landwaterstorage:latest \
+    ghcr.io/fact-sealevel/ssp-landwaterstorage:latest \
     --pipeline-id=1234 \
     --output-gslr-file="/mnt/ssp_lws_out/output_gslr.nc" \
     --output-lslr-file="/mnt/ssp_lws_out/output_lslr.nc" \

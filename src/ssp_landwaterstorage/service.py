@@ -98,6 +98,4 @@ def project_landwaterstorage(
             locations=sites,
         )
     else:
-        print(
-            "No output local SLR file specified, skipping localization step."
-        )
+        print("No output local SLR file specified, skipping localization step.")

@@ -84,16 +84,18 @@ def project_landwaterstorage(
         scenario=scenario,
         lwssamps=gslr,
     )
-
-    sites = read_locations(location_file)
-    fingerprints = read_fingerprints(fp_file)
-    lslr = postprocess(gslr, fingerprints, sites, chunksize)
-    write_lslr(
-        output_lslr_file,
-        local_sl=lslr,
-        targyears=out_conf["targyears"],
-        n_samps=nsamps,
-        baseyear=baseyear,
-        scenario=scenario,
-        locations=sites,
-    )
+    if output_lslr_file:
+        sites = read_locations(location_file)
+        fingerprints = read_fingerprints(fp_file)
+        lslr = postprocess(gslr, fingerprints, sites, chunksize)
+        write_lslr(
+            output_lslr_file,
+            local_sl=lslr,
+            targyears=out_conf["targyears"],
+            n_samps=nsamps,
+            baseyear=baseyear,
+            scenario=scenario,
+            locations=sites,
+        )
+    else:
+        print("No output local SLR file specified, skipping localization step.")

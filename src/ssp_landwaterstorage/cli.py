@@ -25,7 +25,7 @@ from ssp_landwaterstorage.service import project_landwaterstorage
     "--output-lslr-file",
     envvar="SSP_LANDWATERSTORAGE_OUTPUT_LSLR_FILE",
     help="Path to write output local SLR file.",
-    required=True,
+    required=False,
     type=str,
 )
 @click.option(
@@ -70,7 +70,7 @@ from ssp_landwaterstorage.service import project_landwaterstorage
     envvar="SSP_LANDWATERSTORAGE_LOCATION_FILE",
     help="File containing name, id, lat, and lon of points for localization.",
     type=str,
-    required=True,
+    required=False,
     # default="location.lst",
 )
 @click.option(

@@ -1,7 +1,7 @@
 [project]
 name = "ssp-landwaterstorage"
-version = "0.2.0"
-description = "Add your description here"
+version = "0.2.1"
+description = "Containerized application projecting groundwater depletion and dam impoundment contributions to sea level."
 readme = "README.md"
 authors = [
     { name = "Brewster Malevich", email = "bmalevich@impactlab.org" }

@@ -448,7 +448,15 @@ def project(
         "rcp70": "ssp3",
         "rcp85": "ssp5",
     }
-
+    # Adding this so that module can handle ssp-rf scenarios. confirm this is desired behavior
+    SSPtoSSP = {
+        "ssp119": "ssp1",
+        "ssp126": "ssp1",
+        "ssp245": "ssp2",
+        "ssp370": "ssp3",
+        "ssp460": "ssp4",
+        "ssp585": "ssp5",
+    }
     # SSP ordered from low to high projections
     SSPorder = {
         "ssp1": 0,
@@ -465,9 +473,14 @@ def project(
             raise Exception(
                 "Configured RCP scenario does not have a preferred SSP combination."
             )
+    elif len(scen) == 6 and scen[0:3] == "ssp":
+        targetSSP = SSPtoSSP[scen]
+        if scen not in SSPtoSSP:
+            raise Exception(
+                "Configured SSP scenario does not have a corresponding ssp-radiative forcing combination"
+            )
     else:
         targetSSP = scen
-
     # draw scenario population from target scenario
     popdraw = popscen[:, SSPorder[targetSSP]]
 

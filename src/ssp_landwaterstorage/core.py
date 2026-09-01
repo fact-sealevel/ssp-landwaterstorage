@@ -12,7 +12,12 @@ from scipy.stats import norm
 from scipy.optimize import curve_fit
 from scipy.special import erf
 
-
+import logging
+logging.basicConfig(level=logging.INFO, 
+                    format="%(asctime)s - %(levelname)s - %(message)s",
+                    datefmt="%Y-%m-%d %H:%M:%S",
+)
+logger = logging.getLogger(__name__)
 @dataclass
 class PopulationHistory:
     t: np.ndarray
@@ -465,7 +470,7 @@ def project(
         "ssp4": 3,
         "ssp3": 4,
     }
-
+    logger.info("Received scenario: {}".format(scen))
     # extract SSP scenario from configured target RCP or SSP scenario
     if scen[0:3] == "rcp":
         targetSSP = RCPtoSSP[scen]
@@ -481,6 +486,7 @@ def project(
             )
     else:
         targetSSP = scen
+    logger.info("Using SSP scenario: {}".format(targetSSP))
     # draw scenario population from target scenario
     popdraw = popscen[:, SSPorder[targetSSP]]
 

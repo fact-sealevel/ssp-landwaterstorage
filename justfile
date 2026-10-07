@@ -15,4 +15,4 @@ test-cov:
 	uv run pytest -vv --color=yes --cov ssp_landwaterstorage
 
 # run format, linting, testing checks
-validate: format lint test
+validate: format lint test test-cov

@@ -7,6 +7,12 @@ from ssp_landwaterstorage.core import (
     map_RCP_to_SSP,
     map_SSPRC_to_SSP,
     map_scenario,
+    PopulationHistory,
+    ReservoirImpoundment,
+    GroundwaterDepletion,
+    PopulationScenarios,    
+    preprocess
+
 )
 
 
@@ -115,3 +121,48 @@ def test_map_rcp_to_ssp_raises_exception_for_non_rcp_scenario():
     assert "scenario does not have a preferred SSP combination." in str(
         exc_info.value
     ), f"Unexpected exception message: {exc_info.value}"
+
+
+def tests_preprocess_dicts_have_correct_keys():
+
+    pophist = PopulationHistory(
+        t=np.array([2000, 2001]), 
+        pop=np.array([1e6, 1.1e6]),
+        pop0=np.array([1e6, 1.1e6]),
+        t0=np.array([2000, 2001])
+    )
+    dams = ReservoirImpoundment(
+        t=np.array([2000, 2001]), impoundment=np.array([0, 0.1]))
+    popscen = PopulationScenarios(
+        yr=np.array([2000, 2001]),
+        scenarios=np.array([[1e6, 1.1e6], [1.2e6, 1.3e6]]),
+    )
+    gwd = GroundwaterDepletion(
+        t=np.array([[2000, 2001], [2000, 2001]]), depletion=np.array([[0, 0.1], [0, 0.2]]))
+    scenario = "ssp1"
+    dotriangular = 0
+    out_data, out_conf = preprocess(
+        pophist,
+        dams,
+        popscen,
+        gwd,
+        scenario,
+        dotriangular,
+        baseyear=2000,
+        pyear_start=2020,
+        pyear_end=2100,
+        pyear_step=10,
+    )
+    assert set(out_data.keys()) == {
+        "t","pop",
+        "tdams","tgwd",
+        "gwd", "dams",
+        "popscen","popscenyr"}
+    assert set(out_conf.keys()) == {
+        "dgwd_dt_dpop_pcterr",
+        "dam_pcterr",
+        "yrs","scen",
+        "dotriangular","baseyear",
+        "pop0","t0",
+        "targyears"}
+

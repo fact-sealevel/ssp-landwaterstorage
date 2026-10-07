@@ -1,5 +1,4 @@
 import numpy as np
-
 from ssp_landwaterstorage.core import (
     ReservoirImpoundment,
     Locations,
@@ -146,6 +145,7 @@ def test_read_groundwater_depletion_two_files(tmp_path):
 
     np.testing.assert_allclose(actual.t, expected.t)
     np.testing.assert_allclose(actual.depletion, expected.depletion)
+    assert isinstance(expected, GroundwaterDepletion)
 
 
 def test_read_population_scenarios(tmp_path):
@@ -171,3 +171,30 @@ def test_read_population_scenarios(tmp_path):
 
     np.testing.assert_allclose(actual.yr, expected.yr)
     np.testing.assert_allclose(actual.scenarios, expected.scenarios)
+    assert isinstance(expected, PopulationScenarios)
+
+
+def test_read_reservoir_impoundment_returns_correct_type(tmp_path):
+    """
+    Test that read_reservoir_impoundment returns a ReservoirImpoundment object.
+    """
+    tmpfl = tmp_path / "impoundment.csv"
+    tmpfl.write_text("year,mm\n1918.847,0.212\n1921.394,0.212\n")
+
+    actual = read_reservoir_impoundment(tmpfl)
+
+    assert isinstance(actual, ReservoirImpoundment)
+
+
+def test_read_population_scenarios_returns_correct_type(tmp_path):
+    """
+    Test that read_population_scenarios returns a PopulationScenarios object.
+    """
+    tmpfl = tmp_path / "pop_scen.csv"
+    tmpfl.write_text(
+        "year,SSP1-Baseline(IMAGE),SSP5-Baseline(REMIND-MAGPIE),SSP2-Baseline(MESSAGE-GLOBIOM),SSP4-Baseline(GCAM4),SSP3-Baseline(AIM/CGE)\n2005,6530547852,6505000000,6503130000,6506642000,6490987900\n2010,6921797852,6894000000,6867390000,6895882000,6879589600",
+    )
+
+    actual = read_population_scenarios(tmpfl)
+
+    assert isinstance(actual, PopulationScenarios)

@@ -12,6 +12,15 @@ from scipy.stats import norm
 from scipy.optimize import curve_fit
 from scipy.special import erf
 
+import logging
+
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s - %(levelname)s - %(message)s",
+    datefmt="%Y-%m-%d %H:%M:%S",
+)
+logger = logging.getLogger(__name__)
+
 
 @dataclass
 class PopulationHistory:
@@ -390,6 +399,52 @@ def fit(my_data, my_config, pipeline_id):
     return output
 
 
+def map_RCP_to_SSP(scen):
+    # prefered SSP RCP combinations (correspondence with Aimee)
+
+    RCPtoSSP = {
+        "rcp19": "ssp1",
+        "rcp26": "ssp1",
+        "rcp45": "ssp2",
+        "rcp60": "ssp4",
+        "rcp70": "ssp3",
+        "rcp85": "ssp5",
+    }
+    try:
+        return RCPtoSSP[scen]
+    except KeyError as e:
+        raise ValueError(
+            f"Configured RCP '{scen}' scenario does not have a preferred SSP combination."
+        ) from e
+
+
+def map_SSPRC_to_SSP(scen):
+    # Adding this so that module can handle ssp-rf scenarios. confirm this is desired behavior
+    SSPtoSSP = {
+        "ssp119": "ssp1",
+        "ssp126": "ssp1",
+        "ssp245": "ssp2",
+        "ssp370": "ssp3",
+        "ssp460": "ssp4",
+        "ssp585": "ssp5",
+    }
+    try:
+        return SSPtoSSP[scen]
+    except KeyError as e:
+        raise ValueError(
+            f"Configured SSP '{scen}' scenario does not have a corresponding ssp-radiative forcing combination."
+        ) from e
+
+
+def map_scenario(scen):
+    if scen[0:3] == "rcp":
+        return map_RCP_to_SSP(scen)
+    elif len(scen) == 6 and scen[0:3] == "ssp":
+        return map_SSPRC_to_SSP(scen)
+    else:
+        return scen
+
+
 def project(
     my_fit,
     my_config,
@@ -438,17 +493,6 @@ def project(
         return a * erf((pop0 / 1e6 - b) / c) + I0  # see Kopp et al. 2014 eq.1
 
     ##################################################
-    # select scenario population using target RCP or SSP scenario
-    # prefered SSP RCP combinations (correspondence with Aimee)
-    RCPtoSSP = {
-        "rcp19": "ssp1",
-        "rcp26": "ssp1",
-        "rcp45": "ssp2",
-        "rcp60": "ssp4",
-        "rcp70": "ssp3",
-        "rcp85": "ssp5",
-    }
-
     # SSP ordered from low to high projections
     SSPorder = {
         "ssp1": 0,
@@ -457,17 +501,22 @@ def project(
         "ssp4": 3,
         "ssp3": 4,
     }
+    logger.info("Received scenario: {}".format(scen))
 
+    # select scenario population using target RCP or SSP scenario
     # extract SSP scenario from configured target RCP or SSP scenario
-    if scen[0:3] == "rcp":
-        targetSSP = RCPtoSSP[scen]
-        if scen not in RCPtoSSP:
-            raise Exception(
-                "Configured RCP scenario does not have a preferred SSP combination."
-            )
-    else:
-        targetSSP = scen
 
+    targetSSP = map_scenario(scen)
+
+    # if scen[0:3] == "rcp":
+    #     map_RCP_to_SSP(scen)
+
+    # elif len(scen) == 6 and scen[0:3] == "ssp":
+    #     targetSSP = map_SSPRC_to_SSP(scen)
+    # else:
+    #     targetSSP = scen
+
+    logger.info("Using SSP scenario: {}".format(targetSSP))
     # draw scenario population from target scenario
     popdraw = popscen[:, SSPorder[targetSSP]]
 

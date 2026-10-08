@@ -5,7 +5,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased] 
+## [0.3.0] - 2026-10-08 
 
 ## Changed
 ssp-landwaterstorage-specific handling of scenarios is now taken care of in module instead of upstream in FEB. You can now pass standard ssp scenario string to CLI. ([PR #16](https://github.com/fact-sealevel/ssp-landwaterstorage/pull/16), [@e-marshall](https://github.com/e-marshall))
@@ -47,7 +47,7 @@ ssp-landwaterstorage-specific handling of scenarios is now taken care of in modu
 
 - Initial release.
 
-[Unreleased]: https://github.com/fact-sealevel/ssp-landwaterstorage/compare/v0.2.1...HEAD
+[0.3.0]: https://github.com/fact-sealevel/ssp-landwaterstorage/compare/v0.2.1...v0.3.0
 [0.2.1]: https://github.com/fact-sealevel/ssp-landwaterstorage/compare/v0.2.0...v0.2.1
 [0.2.0]: https://github.com/fact-sealevel/ssp-landwaterstorage/compare/v0.1.0...v0.2.0
 [0.1.0]: https://github.com/fact-sealevel/ssp-landwaterstorage/releases/tag/v0.1.0

@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased] 
 
+## Changed
+ssp-landwaterstorage-specific handling of scenarios is now taken care of in module instead of upstream in FEB. You can now pass standard ssp scenario string to CLI. ([PR #16](https://github.com/fact-sealevel/ssp-landwaterstorage/pull/16), [@e-marshall](https://github.com/e-marshall))
 
 
 ## [0.2.1] - 2026-06-08
